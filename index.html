@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow"> <title id="app-title">Midnight Stream</title>
+    <style>
+        body { margin: 0; background: #0B1026; color: #FFD700; font-family: sans-serif; overflow: hidden; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .firefly { position: fixed; width: 4px; height: 4px; background: #FFD700; border-radius: 50%; filter: blur(2px); animation: drift linear infinite; z-index: -1; }
+        @keyframes drift { from { transform: translateY(110vh); opacity: 1; } to { transform: translateY(-10vh); opacity: 0; } }
+        
+        #settings-btn { position: fixed; top: 20px; right: 20px; font-size: 24px; cursor: pointer; opacity: 0.2; z-index: 100; }
+        #settings-menu { position: fixed; top: 0; right: -300px; width: 250px; height: 100%; background: #0B1026; border-left: 2px solid #FFD700; transition: 0.3s; padding: 20px; z-index: 99; box-shadow: -5px 0 15px rgba(0,0,0,0.5); }
+        #settings-menu.open { right: 0; }
+        input { width: 90%; padding: 10px; margin-top: 10px; background: #1a1f35; border: 1px solid #FFD700; color: white; border-radius: 8px; }
+        button { margin-top: 20px; width: 100%; padding: 10px; background: #FFD700; border: none; font-weight: bold; border-radius: 8px; cursor: pointer; }
+        #app-icon-display { width: 80px; height: 80px; border-radius: 20px; margin-bottom: 20px; border: 2px solid #FFD700; object-fit: cover; }
+    </style>
+</head>
+<body>
+    <div id="settings-btn">⚙️</div>
+    <div id="settings-menu">
+        <h3 style="color:#FFD700">Lair Settings</h3>
+        <label>App Name:</label>
+        <input type="text" id="name-input" placeholder="Midnight Stream">
+        <label style="display:block; margin-top:20px;">Icon Image URL:</label>
+        <input type="text" id="icon-input" placeholder="Paste link to image...">
+        <button onclick="saveSettings()">Apply Magic</button>
+    </div>
+
+    <img id="app-icon-display" src="https://via.placeholder.com/80/FFD700/0B1026?text=MS" alt="Icon">
+    <h1 id="display-name">MIDNIGHT STREAM</h1>
+
+    <script>
+        const btn = document.getElementById('settings-btn');
+        const menu = document.getElementById('settings-menu');
+        btn.onclick = () => menu.classList.toggle('open');
+
+        function saveSettings() {
+            const name = document.getElementById('name-input').value;
+            const icon = document.getElementById('icon-input').value;
+            if(name) localStorage.setItem('msName', name);
+            if(icon) localStorage.setItem('msIcon', icon);
+            location.reload();
+        }
+
+        function load() {
+            const name = localStorage.getItem('msName') || 'MIDNIGHT STREAM';
+            const icon = localStorage.getItem('msIcon') || 'https://via.placeholder.com/80/FFD700/0B1026?text=MS';
+            document.getElementById('app-title').innerText = name;
+            document.getElementById('display-name').innerText = name;
+            document.getElementById('app-icon-display').src = icon;
+            // Create Fireflies
+            for(let i=0; i<30; i++) {
+                const f = document.createElement('div');
+                f.className = 'firefly';
+                f.style.left = Math.random() * 100 + 'vw';
+                f.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                document.body.appendChild(f);
+            }
+        }
+        load();
+    </script>
+</body>
+</html>
